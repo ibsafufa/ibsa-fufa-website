@@ -80,7 +80,11 @@
 
     <section class="contact-section" id="contact"><div class="wrap contact-layout">
       <div><div class="eyebrow">LET'S CONNECT</div><h2>Have a tech problem?<br><em>Let's solve it.</em></h2><p>Send a message with a few details about what you need. I'll be glad to discuss the next step.</p>
-        <div class="contact-details"><div><span class="contact-symbol">✉</span><span><small>EMAIL</small><b>Replace with your email address</b></span></div><div><span class="contact-symbol">⌖</span><span><small>LOCATION</small><b>Ethiopia · Remote support by arrangement</b></span></div></div>
+        <div class="contact-details">
+          <div><span class="contact-symbol">✉</span><span><small>EMAIL</small><b><a href="mailto:ibsafufa2010@gmail.com">ibsafufa2010@gmail.com</a></b></span></div>
+          <div><span class="contact-symbol">☎</span><span><small>PHONE / WHATSAPP</small><b><a href="tel:+251917363235">0917363235</a></b></span></div>
+          <div><span class="contact-symbol">⌖</span><span><small>LOCATION</small><b>Ethiopia · Remote support by arrangement</b></span></div>
+        </div></div>
       </div>
       <form class="contact-form" id="contactForm">
         <label>Your name<input name="name" required placeholder="Enter your name"></label>
@@ -88,12 +92,28 @@
         <label>What do you need help with?<select name="service"><option>Computer or laptop</option><option>Printer or office equipment</option><option>Networking or Wi-Fi</option><option>Website or IT system</option><option>Backup or data</option><option>Other</option></select></label>
         <label>Message<textarea name="message" rows="4" required placeholder="Tell me a little about the issue..."></textarea></label>
         <button class="btn btn-primary submit-btn" type="submit">Prepare message <span>↗</span></button>
-        <p class="form-note">This opens your email app with your message. Add your real email address in the website settings before publishing.</p>
+        <p class="form-note">Submitting opens your email app with your message addressed to ibsafufa2010@gmail.com.</p>
       </form>
     </div></section>
   </main>
 
   <footer class="footer"><div class="wrap footer-inner"><a class="brand footer-brand" href="#home"><span class="brand-mark"><span></span><span></span><span></span></span><span><strong>IBSA FUFA</strong><small>DEVICE CARE & IT SERVICES</small></span></a><p>Practical technology. Personal support.</p><span>© <span id="year"></span> Ibsa Fufa. All rights reserved.</span></div></footer>
   <script src="script.js"></script>
+  <script>
+    // Contact form fallback: prepare an email to the website owner's address.
+    document.getElementById('contactForm')?.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const data = new FormData(form);
+      const subject = encodeURIComponent('Device Care service request - ' + (data.get('service') || 'General inquiry'));
+      const body = encodeURIComponent(
+        'Name: ' + data.get('name') + '\n' +
+        'Contact: ' + data.get('reply') + '\n' +
+        'Service: ' + data.get('service') + '\n\n' +
+        'Message:\n' + data.get('message')
+      );
+      window.location.href = 'mailto:ibsafufa2010@gmail.com?subject=' + subject + '&body=' + body;
+    });
+  </script>
 </body>
 </html>

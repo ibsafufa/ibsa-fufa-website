@@ -96,6 +96,88 @@
       </form>
     </div></section>
   </main>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ibsa Fufa - Owner Dashboard</title>
+<style>
+body{font-family:Arial;background:#f1f5f9;margin:0;padding:25px}
+.box{max-width:750px;margin:40px auto;background:white;padding:25px;border-radius:12px}
+input,button{padding:12px;margin:7px 0;width:100%;box-sizing:border-box}
+button{background:#123b68;color:white;border:0;border-radius:6px;cursor:pointer}
+.message{border:1px solid #ddd;padding:15px;margin:12px 0;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>Ibsa Fufa - Owner Login</h2>
+<div id="login">
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Sign In</button>
+<p id="error"></p>
+</div>
+<div id="dashboard" hidden>
+<h2>Message Inbox</h2>
+<button onclick="loadMessages()">Refresh Messages</button>
+<div id="messages"></div>
+<button onclick="logout()">Logout</button>
+</div>
+</div>
+<script>
+async function login(){
+ const r=await fetch('/api/owner/login',{
+ method:'POST',
+ headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({
+ username:username.value,
+ password:password.value
+ })
+ });
+ if(r.ok){
+ loginBox(false);
+ loadMessages();
+ }else error.textContent='Invalid username or password';
+}
+function loginBox(show){
+ login.hidden=!show;
+ dashboard.hidden=show;
+}
+async function loadMessages(){
+ const r=await fetch('/api/owner/messages');
+ if(r.status===401){loginBox(true);return;}
+ const data=await r.json();
+ messages.innerHTML='';
+ data.forEach(m=>{
+ const div=document.createElement('div');
+ div.className='message';
+ const title=document.createElement('b');
+ title.textContent=m.name+' - '+m.email;
+ const body=document.createElement('p');
+ body.textContent=m.message;
+ const date=document.createElement('small');
+ date.textContent=m.created_at;
+ const del=document.createElement('button');
+ del.textContent='Delete';
+ del.onclick=()=>deleteMessage(m.id);
+ div.append(title,date,body,del);
+ messages.appendChild(div);
+ });
+}
+async function deleteMessage(id){
+ if(!confirm('Delete this message?'))return;
+ await fetch('/api/owner/messages/'+id,{method:'DELETE'});
+ loadMessages();
+}
+async function logout(){
+ await fetch('/api/owner/logout',{method:'POST'});
+ loginBox(true);
+}
+</script>
+</body>
+</html>
 
   <footer class="footer"><div class="wrap footer-inner"><a class="brand footer-brand" href="#home"><span class="brand-mark"><span></span><span></span><span></span></span><span><strong>IBSA FUFA</strong><small>DEVICE CARE & IT SERVICES</small></span></a><p>Practical technology. Personal support.</p><span>© <span id="year"></span> Ibsa Fufa. All rights reserved.</span></div></footer>
   <script src="script.js"></script>
